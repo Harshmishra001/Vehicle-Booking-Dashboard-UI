@@ -21,6 +21,24 @@ export default function Home() {
   const router = useRouter();
 
   useEffect(() => {
+    const fetchBookings = () => {
+      const storedBookings = JSON.parse(localStorage.getItem("bookings") || "[]");
+      setBookings(storedBookings);
+    };
+
+    fetchBookings(); // Load bookings on initial render
+
+    const handleStorageChange = () => {
+      fetchBookings(); // Update bookings when localStorage changes
+    };
+
+    window.addEventListener("storage", handleStorageChange);
+    return () => {
+      window.removeEventListener("storage", handleStorageChange);
+    };
+  }, []);
+
+  useEffect(() => {
     fetch("/bookings.json") // Ensure this path matches the location in the public directory
       .then((res) => {
         if (!res.ok) {

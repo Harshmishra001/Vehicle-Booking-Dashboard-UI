@@ -34,7 +34,7 @@ export default function BookingTable({ bookings, onRowClick }: BookingTableProps
           {bookings.map((booking) => (
             <tr
               key={booking.id}
-              className="cursor-pointer hover:bg-gray-100"
+              className="cursor-pointer hover:bg-gray-900"
               onClick={() => onRowClick?.(booking.id)}
             >
               <td className="border border-gray-300 px-4 py-2">{booking.id}</td>

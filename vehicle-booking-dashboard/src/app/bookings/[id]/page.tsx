@@ -44,13 +44,20 @@ export default function BookingDetails() {
   };
 
   const handleSave = () => {
-    // Simulate saving the edited booking
-    setBooking(editedBooking);
-    setIsEditing(false);
+    if (editedBooking) {
+      // Simulate saving the edited booking
+      setBooking(editedBooking);
+      setIsEditing(false);
 
-    // Update the homepage state
-    const event = new CustomEvent("updateBooking", { detail: editedBooking });
-    window.dispatchEvent(event);
+      // Update the bookings in localStorage
+      const updatedBookings = JSON.parse(localStorage.getItem("bookings") || "[]").map((b: Booking) =>
+        b.id === editedBooking.id ? editedBooking : b
+      );
+      localStorage.setItem("bookings", JSON.stringify(updatedBookings));
+
+      alert("Booking successfully edited!");
+      router.push("/"); // Redirect to homepage
+    }
   };
 
   const handleCancelEdit = () => {
@@ -60,19 +67,19 @@ export default function BookingDetails() {
 
   const handleDelete = () => {
     // Simulate deleting the booking
+    const updatedBookings = JSON.parse(localStorage.getItem("bookings") || "[]").filter(
+      (b: Booking) => b.id !== id
+    );
+    localStorage.setItem("bookings", JSON.stringify(updatedBookings));
+
     alert("Booking canceled successfully!");
-
-    // Notify homepage to remove the booking
-    const event = new CustomEvent("deleteBooking", { detail: id });
-    window.dispatchEvent(event);
-
     router.push("/"); // Redirect to homepage
   };
 
   if (!booking) return <div className="text-center mt-10">Loading...</div>;
 
   return (
-    <div className="p-6 max-w-4xl mx-auto bg-white shadow-md rounded-lg">
+    <div className="p-6 max-w-4xl mx-auto bg-white shadow-md rounded-lg text-gray-700">
       <h1 className="text-3xl font-bold text-center mb-6">Booking Details</h1>
       <div className="space-y-4">
         {isEditing ? (
