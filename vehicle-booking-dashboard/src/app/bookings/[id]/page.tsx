@@ -55,6 +55,9 @@ export default function BookingDetails() {
       );
       localStorage.setItem("bookings", JSON.stringify(updatedBookings));
 
+      // Dispatch custom event to notify home page of update
+      window.dispatchEvent(new CustomEvent("updateBooking", { detail: editedBooking }));
+
       alert("Booking successfully edited!");
       router.push("/"); // Redirect to homepage
     }
@@ -71,6 +74,9 @@ export default function BookingDetails() {
       (b: Booking) => b.id !== id
     );
     localStorage.setItem("bookings", JSON.stringify(updatedBookings));
+
+    // Dispatch custom event to notify home page of deletion
+    window.dispatchEvent(new CustomEvent("deleteBooking", { detail: id }));
 
     alert("Booking canceled successfully!");
     router.push("/"); // Redirect to homepage
